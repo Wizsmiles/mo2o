@@ -1,0 +1,4 @@
+get_recipes:
+    path: /recipes
+    controller: App\Controller\Recipes\GetRecipesController
+    methods: GET
