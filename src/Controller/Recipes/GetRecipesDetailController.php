@@ -8,7 +8,7 @@ use App\Controller\ApiController;
 use App\Exception\ApiInvalidRequestException;
 use Symfony\Component\HttpFoundation\Request;
 
-class GetRecipesController extends ApiController
+class GetRecipesDetailController extends ApiController
 {
 
     public function __invoke(Request $request)
@@ -16,16 +16,17 @@ class GetRecipesController extends ApiController
         return $this->makePuppyRecipesRequest($request);
     }
 
+
     protected function prepareOptions(Request $request)
     {
         $options = [];
-        $search = $request->query->get('search', parent::DEFAULT_NULL);
+        $ingredients = $request->query->get('ingredients', parent::DEFAULT_NULL);
         $page = (int) $request->query->get('page', parent::DEFAULT_NULL);
-        if (isset($search)) {
-            if (!is_string($search)) {
-                throw new ApiInvalidRequestException('Invalid argument search!');
+        if (isset($ingredients)) {
+            if (!is_string($ingredients)) {
+                throw new ApiInvalidRequestException('Invalid argument ingredients!');
             }
-            $options["query"]["q"] = $search;
+            $options["query"]["i"] = $ingredients;
         }
         if (isset($page)) {
             if (!is_int($page)) {
@@ -41,8 +42,7 @@ class GetRecipesController extends ApiController
         $results = json_decode($data)->results;
 
         foreach ($results as $result) {
-            unset($result->ingredients);
-            unset($result->thumbnail);
+            unset($result->href);
         }
         return $results;
     }
