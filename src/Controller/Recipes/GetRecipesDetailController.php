@@ -21,7 +21,7 @@ class GetRecipesDetailController extends ApiController
     {
         $options = [];
         $ingredients = $request->query->get('ingredients', parent::DEFAULT_NULL);
-        $page = (int) $request->query->get('page', parent::DEFAULT_NULL);
+        $page = $request->query->get('page', parent::DEFAULT_NULL);
         if (isset($ingredients)) {
             if (!is_string($ingredients)) {
                 throw new ApiInvalidRequestException('Invalid argument ingredients!');
@@ -29,7 +29,7 @@ class GetRecipesDetailController extends ApiController
             $options["query"]["i"] = $ingredients;
         }
         if (isset($page)) {
-            if (!is_int($page)) {
+            if ((int) $page <= 0) {
                 throw new ApiInvalidRequestException('Invalid argument page!');
             }
             $options["query"]["p"] = $page;
